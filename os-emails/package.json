@@ -1,0 +1,27 @@
+{
+  "name": "os-emails",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistema web simples para cadastro e consulta de Ordens de Servico (OS) e dos e-mails dos clientes.",
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "setup": "npm install",
+    "dev": "concurrently -n api,web -c blue,magenta \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "npm run dev --workspace server",
+    "dev:web": "npm run dev --workspace web",
+    "build": "npm run build --workspace server && npm run build --workspace web",
+    "start": "npm run start --workspace server",
+    "test": "npm run test --workspace server && npm run test --workspace web",
+    "seed": "npm run seed --workspace server",
+    "db:clear": "npm run db:clear --workspace server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

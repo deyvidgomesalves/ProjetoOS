@@ -1,0 +1,35 @@
+# Blueprint de deploy no Render (https://render.com)
+#
+# Como usar:
+#  1. Suba este projeto para um repositório no GitHub.
+#  2. No Render: New + > Blueprint > escolha o repositório.
+#  3. Informe a variável DATABASE_URL (Postgres do Supabase/Neon ou o Postgres do Render).
+#  4. Depois do deploy, o link público (https://os-emails.onrender.com) já pode ser
+#     compartilhado com a equipe.
+#
+# Sem DATABASE_URL o serviço usa SQLite. Em planos sem disco persistente os dados
+# se perdem a cada deploy, por isso o recomendado em produção é o Postgres.
+
+services:
+  - type: web
+    name: os-emails
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 24.21.0
+      - key: NODE_ENV
+        value: production
+      - key: DB_DRIVER
+        value: postgres
+      - key: DATABASE_URL
+        sync: false # informe no painel (ex.: Postgres do Supabase)
+      - key: PGSSL
+        value: require
+      - key: SESSION_SECRET
+        generateValue: true # mantém as sessões válidas entre deploys
